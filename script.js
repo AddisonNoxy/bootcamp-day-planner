@@ -2,6 +2,67 @@
 // the code isn't run until the browser has finished rendering all the elements
 // in the html.
 $(function () {
+  var scheduleMain = $("#schedule-main")
+  var timeblockFormat = 24;
+  var today = dayjs().format("MMMM D, YYYY");
+  var currentHour = dayjs().format("H");
+  var timeBlocks = [];
+  currentHour = Number(currentHour);
+  console.log(today);
+  console.log(typeof currentHour);
+  var hourText = "AM";
+
+  $("header").append(today);
+
+  //create the timeblocks and their content
+  for (var i = 0; i < timeblockFormat; i++) {
+    if (i <= 12) {
+      hourText = "AM";
+    } else {
+      hourText = "PM";
+    }
+    timeBlocks[i] = $("<div>");
+    timeBlocks[i].attr("id", "hour-" + String(i));
+    if (currentHour > i) {
+      timeBlocks[i].attr("class", "row time-block past");
+    } else if (currentHour == i) {
+      timeBlocks[i].attr("class", "row time-block present");
+    } else {
+      timeBlocks[i].attr("class", "row time-block future");
+    }
+    var timeDiv = $("<div>");
+    timeDiv.attr("class", "col-2 col-md-1 hour text-center py-3");
+    timeDiv.text(i + ":00");
+
+    var inputArea = $("<textarea>");
+    inputArea.attr("class", "col-8 col-md-10 description");
+    inputArea.attr("rows", "3");
+
+    var saveButton = $("<button>");
+    var saveInner = $("<i>");
+    saveButton.attr("class", "btn saveBtn col-2 col-md-1");
+    saveButton.attr("aria-label", "save");
+    saveButton.attr("id", String(i+1));
+    saveInner.attr("class", "fas fa-save");
+    saveInner.attr("aria-hidden", "true");
+
+    scheduleMain.append(timeBlocks[i]);
+    timeBlocks[i].append(timeDiv);
+    timeBlocks[i].append(inputArea);
+    timeBlocks[i].append(saveButton)
+    saveButton.append(saveInner);
+
+
+
+  }
+
+  console.log(typeof $("button"));
+
+  var allButtons = Object.entries($("button"));
+  console.log(allButtons);
+
+  allButtons.forEach();
+
   // TODO: Add a listener for click events on the save button. This code should
   // use the id in the containing time-block as a key to save the user input in
   // local storage. HINT: What does `this` reference in the click listener
