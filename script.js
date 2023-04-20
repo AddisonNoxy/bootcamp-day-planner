@@ -8,8 +8,8 @@ $(function () {
   var currentHour = dayjs().format("H");
   var timeBlocks = [];
   currentHour = Number(currentHour);
-  console.log(today);
-  console.log(typeof currentHour);
+  // console.log(today);
+  // console.log(typeof currentHour);
   var hourText = "AM";
 
   $("header").append(today);
@@ -22,7 +22,7 @@ $(function () {
       hourText = "PM";
     }
     timeBlocks[i] = $("<div>");
-    timeBlocks[i].attr("id", "hour-" + String(i));
+    timeBlocks[i].attr("id", "hour-" + String(i+1));
     if (currentHour > i) {
       timeBlocks[i].attr("class", "row time-block past");
     } else if (currentHour == i) {
@@ -35,14 +35,16 @@ $(function () {
     timeDiv.text(i + ":00");
 
     var inputArea = $("<textarea>");
+    inputArea.attr("id", "hour-" + String(i+1));
     inputArea.attr("class", "col-8 col-md-10 description");
     inputArea.attr("rows", "3");
+    inputArea.val(localStorage.getItem("hour-" + String(i+1))); //retrieve existing input value from local storage
 
     var saveButton = $("<button>");
     var saveInner = $("<i>");
     saveButton.attr("class", "btn saveBtn col-2 col-md-1");
     saveButton.attr("aria-label", "save");
-    saveButton.attr("id", String(i+1));
+    saveButton.attr("id", "hour-" + String(i+1));
     saveInner.attr("class", "fas fa-save");
     saveInner.attr("aria-hidden", "true");
 
@@ -56,12 +58,13 @@ $(function () {
 
   }
 
-  console.log(typeof $("button"));
+  var buttons = $("button");
 
-  var allButtons = Object.entries($("button"));
-  console.log(allButtons);
-
-  allButtons.forEach();
+  $.each(buttons, function() {
+    $(this).on("click", function() {
+      localStorage.setItem($(this).attr("id"), $("textarea[id='" + $(this).attr("id") + "']").val());
+    })
+  })
 
   // TODO: Add a listener for click events on the save button. This code should
   // use the id in the containing time-block as a key to save the user input in
